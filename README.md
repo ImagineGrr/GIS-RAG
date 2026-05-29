@@ -89,16 +89,4 @@ Example response structure:
 - `schema_metadata.py` — keep this accurate to help the model generate correct SQL.
 - `validator.py` — tighten filtering rules before production use.
 
-## Next steps / improvements
-- Add environment-based configuration for DB and Ollama model name.
-- Harden SQL validation and add parameterized query execution.
-- Add authentication for the API and rate-limiting.
-- Add a `requirements.txt` or `pyproject.toml` for reproducible installs.
-
----
-
-If you want, I can:
-
-- generate a `requirements.txt` and a `.env`-backed config loader, or
-- harden `validator.py` with an expanded deny list and unit tests.
 
