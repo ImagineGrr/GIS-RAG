@@ -12,30 +12,22 @@ app = FastAPI()
 
 # Static + templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
 templates = Jinja2Templates(directory="templates")
 
 
 # Frontend Route
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html"
-    )
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 # Chatbot API
 @app.get("/ask")
 def ask(question: str):
 
-    # Generate SQL from AI
     sql_query = generate_sql(question)
 
-    # Validate SQL
     if not validate_sql(sql_query):
-
         return {
             "error": "Unsafe SQL generated",
             "generated_sql": sql_query
@@ -43,31 +35,12 @@ def ask(question: str):
 
     try:
 
-        # Execute query
         result = run_query(sql_query)
-
-        # Convert dataframe to JSON
-        rows = result.to_dict(orient="records")
-
-        # Default answer
-        answer = "Query executed successfully."
-
-        # Better answer for count/single-value queries
-        if len(rows) == 1 and len(rows[0]) == 1:
-
-            value = list(rows[0].values())[0]
-            answer = f"Result: {value}"
-
-        # Better answer for empty results
-        elif len(rows) == 0:
-
-            answer = "No results found."
 
         return {
             "question": question,
-            "answer": answer,
             "generated_sql": sql_query,
-            "results": rows
+            "results": result.to_dict(orient="records")
         }
 
     except Exception as e:
