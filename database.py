@@ -2,7 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 
 engine = create_engine(
-    "postgresql://postgres:1234567890@localhost:5432/postgres"
+    "postgresql://postgres:8866@localhost:5432/postgres"
 )
 
 def run_query(sql):
